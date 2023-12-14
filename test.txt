@@ -1,0 +1,34 @@
+def fcfs(requests):
+    return requests
+
+def sstf(requests, start_position):
+    sorted_requests = sorted(requests, key=lambda x: abs(x - start_position))
+    return sorted_requests
+
+def scan(requests, start_position):
+    sorted_requests = sorted(requests)
+    lower = [req for req in sorted_requests if req < start_position]
+    upper = [req for req in sorted_requests if req >= start_position]
+    return upper + lower
+
+def c_scan(requests, start_position):
+    sorted_requests = sorted(requests)
+    lower = [req for req in sorted_requests if req < start_position]
+    upper = [req for req in sorted_requests if req >= start_position]
+    return upper + lower
+
+def look(requests, start_position):
+    sorted_requests = sorted(requests)
+    lower = [req for req in sorted_requests if req < start_position]
+    upper = [req for req in sorted_requests if req > start_position]
+    return upper + lower
+
+# Example Usage
+requests = [98, 183, 37, 122, 14, 124, 65, 67]
+start_position = 53
+
+print("FCFS:", fcfs(requests.copy()))
+print("SSTF:", sstf(requests.copy(), start_position))
+print("SCAN:", scan(requests.copy(), start_position))
+print("C-SCAN:", c_scan(requests.copy(), start_position))
+print("LOOK:", look(requests.copy(), start_position))

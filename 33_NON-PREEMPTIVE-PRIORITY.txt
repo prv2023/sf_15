@@ -1,0 +1,43 @@
+def priority_scheduling(processes):
+    n= len(processes)
+    processes.sort(key=lambda x:x[2])
+
+    wt= [0]*n
+    tat= [0]*n
+
+    wt[0]=0
+    tat[0]= processes[0][1]
+
+    for i in range(1,n):
+        wt[i]= tat[i-1]
+        tat[i]= wt[i]+processes[i][1]
+
+    total_wt= sum(wt)
+    total_tat= sum(tat)
+
+    avg_wt= total_wt/n
+    avg_tat= total_tat/n
+
+    return wt,tat,avg_wt,avg_tat
+
+
+
+
+
+
+# Example usage:
+processes_priority = [(1, 6, 3), (2, 8, 1), (3, 7, 2), (4, 3, 4)]
+wt_priority, tat_priority, avg_wt_priority, avg_tat_priority = priority_scheduling(processes_priority)
+
+print("Non-Preemptive Priority Scheduling:")
+print("Process\tPriority\tBurst Time\tWaiting Time\tTurnaround Time")
+for i in range(len(processes_priority)):
+    print(f"{processes_priority[i][0]}\t\t{processes_priority[i][2]}\t\t{processes_priority[i][1]}\t\t{wt_priority[i]}\t\t{tat_priority[i]}")
+
+print(f"\nAverage Waiting Time: {avg_wt_priority}")
+print(f"Average Turnaround Time: {avg_tat_priority}")
+
+'''
+
+
+'''

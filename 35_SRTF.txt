@@ -1,0 +1,51 @@
+def srtf_scheduling(processes):
+    n = len(processes)
+    processes.sort(key=lambda x: x[1])  # Sort processes based on burst time
+
+    time = 0
+    completed = 0
+    wt = [0] * n
+    tat = [0] * n
+    rt = [process[1] for process in processes]
+
+    while completed < n:
+        min_burst_index = -1
+        min_burst_time = float('inf')
+
+        for i in range(n):
+            if rt[i] > 0 and processes[i][0] <= time and rt[i] < min_burst_time:
+                min_burst_index = i
+                min_burst_time = rt[i]
+
+        if min_burst_index == -1: #if at given time no process has arrived
+            time += 1
+            continue
+
+        rt[min_burst_index] -= 1
+
+        if rt[min_burst_index] == 0:
+            completed += 1
+            tat[min_burst_index] = time + 1 - processes[min_burst_index][0]
+            wt[min_burst_index] = tat[min_burst_index] - processes[min_burst_index][1]
+
+        time += 1
+
+    total_wt = sum(wt)
+    total_turnaround_time = sum(tat)
+
+    average_wt = total_wt / n
+    average_turnaround_time = total_turnaround_time / n
+
+    return wt, tat, average_wt, average_turnaround_time
+
+# Example usage:
+processes_srtf = [(1, 6), (2, 8), (3, 7), (4, 3)]
+wt_srtf, turnaround_time_srtf, avg_wt_srtf, avg_turnaround_time_srtf = srtf_scheduling(processes_srtf)
+
+print("SRTF Scheduling:")
+print("Process\tBurst Time\tWaiting Time\tTurnaround Time")
+for i in range(len(processes_srtf)):
+    print(f"{processes_srtf[i][0]}\t\t{processes_srtf[i][1]}\t\t{wt_srtf[i]}\t\t{turnaround_time_srtf[i]}")
+
+print(f"\nAverage Waiting Time: {avg_wt_srtf}")
+print(f"Average Turnaround Time: {avg_turnaround_time_srtf}")

@@ -1,0 +1,56 @@
+class DiskScheduler:
+    def __init__(self, requests, initial_position):
+        self.requests = requests
+        self.current_position = initial_position
+
+    def fcfs(self):
+        return self.requests.copy()
+
+    def sstf(self):
+        sequence = []
+        while self.requests:
+            closest_request = min(self.requests, key=lambda x: abs(x - self.current_position))
+            sequence.append(closest_request)
+            self.current_position = closest_request
+            self.requests.remove(closest_request)
+        return sequence
+
+    def scan(self):
+        sequence = []
+        sorted_requests = sorted(self.requests)
+        lower_requests = [request for request in sorted_requests if request < self.current_position]
+        higher_requests = [request for request in sorted_requests if request >= self.current_position]
+        sequence.extend(reversed(lower_requests))
+        sequence.extend(higher_requests)
+        return sequence
+
+    def c_scan(self):
+        sequence = []
+        sorted_requests = sorted(self.requests)
+        lower_requests = [request for request in sorted_requests if request < self.current_position]
+        higher_requests = [request for request in sorted_requests if request >= self.current_position]
+        sequence.extend(reversed(lower_requests))
+        sequence.extend(reversed(higher_requests))
+        return sequence
+
+    def look(self):
+        sequence = []
+        sorted_requests = sorted(self.requests)
+        lower_requests = [request for request in sorted_requests if request < self.current_position]
+        higher_requests = [request for request in sorted_requests if request > self.current_position]
+        sequence.extend(reversed(lower_requests))
+        sequence.extend(higher_requests)
+        return sequence
+
+
+# Example usage:
+requests = [98, 183, 37, 122, 14, 124, 65, 67]
+initial_position = 53
+
+scheduler = DiskScheduler(requests, initial_position)
+
+print("FCFS:", scheduler.fcfs())
+print("SSTF:", scheduler.sstf())
+print("SCAN:", scheduler.scan())
+print("C-SCAN:", scheduler.c_scan())
+print("LOOK:", scheduler.look())

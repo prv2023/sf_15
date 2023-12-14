@@ -1,0 +1,24 @@
+def firstfit(mb,p):
+
+    n= len(p)
+    m= len(mb)
+    allocation= [-1]*n
+
+
+    for i in range (n):
+
+        for j in range (m):
+
+            if p[i]<= mb[j]:
+                allocation[i]=j
+                mb[j] -= p[i]
+                break
+    
+    return allocation
+
+memory=[100,200,300,400,500]
+process=[212, 417, 112, 81]
+
+alloc= firstfit(memory,process)
+
+print("Best fit : ",alloc)

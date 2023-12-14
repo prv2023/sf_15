@@ -1,0 +1,38 @@
+def rr(processes, time_slice):
+    n = len(processes)
+    time = 0
+    rt = [process[1] for process in processes]
+    wt = [0] * n
+    tat = [0] * n
+
+    while any(rt):
+        for i in range(n):
+            if rt[i] <= time_slice:
+                time += rt[i]
+                wt[i] = time - processes[i][1]  # Update waiting time
+                tat[i] = wt[i] + processes[i][1]  # Update turnaround time
+                rt[i] = 0
+            else:
+                time += time_slice
+                rt[i] -= time_slice
+
+    for i in range(n):
+        wt[i] = tat[i] - processes[i][1]
+
+    total_wt = sum(wt)
+    total_tat = sum(tat)
+
+    avg_wt = total_wt / n
+    avg_tat = total_tat / n
+
+    return wt, tat, avg_wt, avg_tat
+
+
+processes_rr = [(1, 6), (2, 5), (3, 9), (4, 15), (5, 1), (6, 12)]
+ts = 3
+wt_rr, tat_rr, avg_wt_rr, avg_tat_rr = rr(processes_rr, ts)
+
+print(f"Processes\tBurst Time\tWaiting Time\tTAT time")
+
+for i in range(len(processes_rr)):
+    print(f"{processes_rr[i][0]}\t\t{processes_rr[i][1]}\t\t{wt_rr[i]}\t\t{tat_rr[i]}")

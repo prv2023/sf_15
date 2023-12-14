@@ -1,0 +1,47 @@
+import time
+import threading
+import queue
+
+buffer = queue.Queue(maxsize=5)
+
+mutex= threading.Semaphore(1)
+empty= threading.Semaphore(5)
+full= threading.Semaphore(0)
+
+def producer():
+
+    for i in range(1,11):
+        time.sleep(1)
+        mutex.acquire()
+        empty.acquire()
+        buffer.put(i)
+
+        print(f"Produced item : {i}")
+
+        mutex.release()
+        full.release()
+
+def consumer():
+
+    for i in range(1,11):
+        time.sleep(2)
+        full.acquire()
+        mutex.acquire()
+
+        item= buffer.get()
+        
+        print(f"Consumed Item : {i}")
+
+        empty.release()
+        mutex.release()
+
+
+p_thread= threading.Thread(target=producer)
+c_thread= threading.Thread(target=consumer)
+
+p_thread.start()
+c_thread.start()
+
+
+p_thread.join()
+c_thread.join()

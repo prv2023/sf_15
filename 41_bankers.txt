@@ -1,0 +1,82 @@
+import numpy as np
+
+class BankersAlgorithm:
+    def __init__(self, available, maximum, allocation):
+        self.available = np.array(available)
+        self.maximum = np.array(maximum)
+        self.allocation = np.array(allocation)
+        self.need = self.maximum - self.allocation
+        self.num_processes, self.num_resources = self.maximum.shape
+
+    def request_resources(self, process_id, request):
+        if not self.is_valid_request(process_id, request):
+            print("Invalid request. Denied.")
+            return
+
+        self.available -= request
+        self.allocation[process_id] += request
+        self.need[process_id] -= request
+
+        if self.is_safe_state():
+            print("Request granted. System in safe state.")
+        else:
+            print("Request denied. Restored previous state.")
+            self.available += request
+            self.allocation[process_id] -= request
+            self.need[process_id] += request
+
+    def is_valid_request(self, process_id, request):
+        return (request <= self.need[process_id]).all() and (request <= self.available).all()
+
+    def is_safe_state(self):
+        work = self.available.copy()
+        finish = np.zeros(self.num_processes, dtype=bool)
+
+        for _ in range(self.num_processes):
+            for i in range(self.num_processes):
+                if not finish[i] and (self.need[i] <= work).all():
+                    work += self.allocation[i]
+                    finish[i] = True
+
+        return finish.all()
+
+def main():
+    available_resources = [3, 3, 2]
+    maximum_claim = [
+        [7, 5, 3],
+        [3, 2, 2],
+        [9, 0, 2],
+        [2, 2, 2],
+        [4, 3, 3]
+    ]
+    allocation = [
+        [0, 1, 0],
+        [2, 0, 0],
+        [3, 0, 2],
+        [2, 1, 1],
+        [0, 0, 2]
+    ]
+
+    banker = BankersAlgorithm(available_resources, maximum_claim, allocation)
+
+    print("Initial State:")
+    print("Available resources:", banker.available)
+    print("Maximum claim matrix:\n", banker.maximum)
+    print("Allocation matrix:\n", banker.allocation)
+    print("Need matrix:\n", banker.need)
+
+    process_id = int(input("Enter process ID (0-4) to request resources or -1 to exit: "))
+    while process_id != -1:
+        request = np.array([int(x) for x in input("Enter requested resources: ").split()])
+        banker.request_resources(process_id, request)
+
+        print("\nCurrent State:")
+        print("Available resources:", banker.available)
+        print("Maximum claim matrix:\n", banker.maximum)
+        print("Allocation matrix:\n", banker.allocation)
+        print("Need matrix:\n", banker.need)
+
+        process_id = int(input("\nEnter process ID (0-4) to request resources or -1 to exit: "))
+
+if __name__ == "__main__":
+    main()

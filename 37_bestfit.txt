@@ -1,0 +1,27 @@
+def bestfit(mb,processes):
+    alloc = [-1] * len(processes)
+
+    for i in range (len(processes)):
+        best_block=-1
+
+        for j in range (len(mb)):
+            
+            if processes[i]<=mb[j]:
+                if best_block==-1 or mb[j]<mb[best_block]:
+                    best_block=j
+
+        if best_block!=-1: 
+            alloc[i]= best_block
+            mb[best_block] -= processes[i]
+
+    return alloc
+
+
+
+
+memory=[100,200,300,400,500]
+process=[212, 417, 112, 426]
+
+allocation= bestfit(memory,process)
+
+print("Best fit : ",allocation)
