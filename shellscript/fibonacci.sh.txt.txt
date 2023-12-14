@@ -1,0 +1,11 @@
+ib=0
+ia=1
+ai=1
+echo "1"
+
+for(( i=0; i<=5; i++)); do
+	ia=$((ia+ib))
+	ib=$((ia-ib))
+	echo "$ia"
+done
+#======= fibonacci.sh =====

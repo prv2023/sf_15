@@ -1,0 +1,12 @@
+a=$1
+b=$2
+c=$3
+
+if [ $a -gt $b ] && [ $a -gt $c ];then
+	echo "$a is the greatest"
+elif [ $b -gt $a ] && [ $b -gt $c ]; then
+	echo "$b is greaterst"
+else
+	echo "$c is greatest"
+fi
+#======= largest.sh =====

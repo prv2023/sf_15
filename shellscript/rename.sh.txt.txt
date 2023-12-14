@@ -1,0 +1,1 @@
+mv text2.txt $(echo text1.$(whoami))

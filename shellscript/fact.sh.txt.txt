@@ -1,0 +1,11 @@
+number=$1
+factorial=1
+# Calculate factorial
+for (( i=1; i <= $number ; i++ )); do
+    factorial=$((factorial * i))
+done
+
+# Display the factorial
+echo "Factorial of $number is: $factorial"
+
+#======= fact.sh =====

@@ -1,0 +1,9 @@
+files=$(ls *.sh)
+
+
+for file in $files; do
+	 $(mv $file $file.txt)
+	echo "$file"
+done
+
+#======= temp.sh =====

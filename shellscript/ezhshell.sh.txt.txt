@@ -1,0 +1,8 @@
+
+#!/bin/bash
+head -n 11 text.txt
+awk '{print substr($0,0,3)}' text.txt
+sort -i text.txt
+find . -type d
+
+tail -n 11 text.txt

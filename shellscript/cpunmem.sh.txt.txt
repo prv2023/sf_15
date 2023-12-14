@@ -1,0 +1,4 @@
+ps aux --sort=-%cpu | head -n 11
+echo "========================="
+ps aux --sort=-%mem | head -n 11
+

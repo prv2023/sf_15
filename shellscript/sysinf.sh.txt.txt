@@ -1,0 +1,11 @@
+echo "The  Current logged in user and logname is $USER $LOGNAME"
+echo "Shell is $SHELL"
+echo "Home directory is $HOME"
+echo "OS is $(uname -s)"
+echo "====="
+echo "====="
+echo "PAth is $PATH"
+echo "==="
+echo "Current director is  $pwd"
+echo "OS version, release number and kernel are $(lsb_release -r -s ) $(lsb_release -d -s ) $(uname -r)"
+
