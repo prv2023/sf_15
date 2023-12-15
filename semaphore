@@ -1,0 +1,67 @@
+import threading
+import time
+
+# Semaphore to control access to the shared buffer
+buffer_semaphore = threading.Semaphore(1)
+
+# Semaphore to control the number of empty slots in the buffer
+empty_slots_semaphore = threading.Semaphore(10)
+
+# Semaphore to control the number of filled slots in the buffer
+filled_slots_semaphore = threading.Semaphore(0)
+
+# Shared buffer
+buffer = []
+
+# Producer thread
+def producer():
+    while True:
+        # Produce an item
+        item = time.time()
+
+        # Wait for an empty slot in the buffer
+        empty_slots_semaphore.acquire()
+
+        # Acquire the buffer semaphore to access the shared buffer
+        buffer_semaphore.acquire()
+
+        # Add the item to the buffer
+        buffer.append(item)
+        print(f"Produced item: {item}")
+
+        # Release the buffer semaphore
+        buffer_semaphore.release()
+
+        # Signal that a slot in the buffer is filled
+        filled_slots_semaphore.release()
+
+        # Sleep for some time before producing the next item
+        time.sleep(1)
+
+# Consumer thread
+def consumer():
+    while True:
+        # Wait for a filled slot in the buffer
+        filled_slots_semaphore.acquire()
+
+        # Acquire the buffer semaphore to access the shared buffer
+        buffer_semaphore.acquire()
+
+        # Remove an item from the buffer
+        item = buffer.pop(0)
+        print(f"Consumed item: {item}")
+
+        # Release the buffer semaphore
+        buffer_semaphore.release()
+
+        # Signal that an empty slot is available in the buffer
+        empty_slots_semaphore.release()
+
+        # Sleep for some time before consuming the next item
+        time.sleep(2)
+
+# Create and start the producer and consumer threads
+producer_thread = threading.Thread(target=producer)
+consumer_thread = threading.Thread(target=consumer)
+producer_thread.start()
+consumer_thread.start()
