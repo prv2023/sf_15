@@ -1,0 +1,41 @@
+def booth_multiplication(multiplier, multiplicand):
+    # Ensure both numbers are in two's complement form
+    multiplier = bin(multiplier)[2:]
+    multiplicand = bin(multiplicand)[2:]
+
+    # Determine the number of bits needed for the product
+    n = max(len(multiplier), len(multiplicand))
+
+    # Initialize variables
+    product = 0
+    accumulator = 0
+    multiplier_prev_bit = 0
+
+    for i in range(n):
+        multiplier_bit = int(multiplier[-1], 2)
+        multiplicand_bit = int(multiplicand[-1], 2)
+
+        # Check the last two bits of the multiplier
+        if multiplier_bit == 1 and multiplier_prev_bit == 0:
+            accumulator += int(multiplicand, 2)
+        elif multiplier_bit == 0 and multiplier_prev_bit == 1:
+            accumulator -= int(multiplicand, 2)
+
+        # Right shift the accumulator and multiplier
+        accumulator >>= 1
+        multiplier_prev_bit = multiplier_bit
+        multiplier = '0' + multiplier[:-1]
+        multiplicand = '0' + multiplicand[:-1]
+
+    # Convert the result to decimal
+    product = bin(product)[2:]
+    product = int(product, 2)
+
+    return product
+
+# Take user input
+multiplier = int(input("Enter the multiplier: "))
+multiplicand = int(input("Enter the multiplicand: "))
+
+result = booth_multiplication(multiplier, multiplicand)
+print(f"The product of {multiplier} and {multiplicand} is: {result}")
