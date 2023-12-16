@@ -16,9 +16,23 @@ def firstfit(mb,p):
     
     return allocation
 
-memory=[100,200,300,400,500]
-process=[212, 417, 112, 81]
+memory = []
+process = []
+
+memory_count = int(input("Enter the number of memory blocks: "))
+for i in range(memory_count):
+    memory_size = int(input(f"Enter the size of memory block {i+1}: "))   #f string
+    memory.append(memory_size)   #add the size of memory to the end of the respective list
+
+process_count = int(input("Enter the number of processes: "))
+for i in range(process_count):
+    process_size = int(input(f"Enter the size of process {i+1}: "))
+    process.append(process_size)
 
 alloc= firstfit(memory,process)
 
-print("Best fit : ",alloc)
+print("first fit : ",alloc)
+
+
+
+
