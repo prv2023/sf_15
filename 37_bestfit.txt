@@ -1,5 +1,9 @@
 def bestfit(mb,processes):
-    alloc = [-1] * len(processes)
+      #mb is the memory block
+    #processes is the list of processes
+    #returns a list of tuples with the process id and the memory block id
+    #if no memory block is available, returns an empty list
+    alloc = [-1] * len(processes)  #-1 means nothing has been assigned yet, like a placeholder
 
     for i in range (len(processes)):
         best_block=-1
@@ -7,20 +11,25 @@ def bestfit(mb,processes):
         for j in range (len(mb)):
             
             if processes[i]<=mb[j]:
-                if best_block==-1 or mb[j]<mb[best_block]:
+                if best_block==-1 or mb[j]<mb[best_block]:   #-1 means no memory block has been selected yet
                     best_block=j
 
         if best_block!=-1: 
             alloc[i]= best_block
-            mb[best_block] -= processes[i]
+            mb[best_block] -= processes[i]    #reflect in the allocation, reduces size
 
     return alloc
 
 
+memory = []
+process = []
 
+memory_input = input("Enter the memory blocks (separated by spaces): ")
+memory = list(map(int, memory_input.split()))
 
-memory=[100,200,300,400,500]
-process=[212, 417, 112, 426]
+process_input = input("Enter the processes (separated by spaces): ")
+process = list(map(int, process_input.split()))
+
 
 allocation= bestfit(memory,process)
 
