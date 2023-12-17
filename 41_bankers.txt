@@ -41,24 +41,35 @@ class BankersAlgorithm:
         return finish.all()
 
 def main():
-    available_resources = [3, 3, 2]
-    maximum_claim = [
-        [7, 5, 3],
-        [3, 2, 2],
-        [9, 0, 2],
-        [2, 2, 2],
-        [4, 3, 3]
-    ]
-    allocation = [
-        [0, 1, 0],
-        [2, 0, 0],
-        [3, 0, 2],
-        [2, 1, 1],
-        [0, 0, 2]
-    ]
+    available_resources = [int(x) for x in input("Enter the values of available resources: ").split()]
+    
+    num_processes = int(input("Enter the number of processes: "))
+    maximum_claim = []
+    for _ in range(num_processes):
+        claim = [int(x) for x in input("Enter the maximum claim for process {}: ".format(_)).split()]
+        maximum_claim.append(claim)
+
+    allocation = []
+    for _ in range(num_processes):
+        allocated = [int(x) for x in input("Enter the allocation for process {}: ".format(_)).split()]
+        allocation.append(allocated)
 
     banker = BankersAlgorithm(available_resources, maximum_claim, allocation)
-
+    #available_resources = [3, 3, 2]
+    #maximum_claim = [
+     #   [7, 5, 3],
+      #  [3, 2, 2],
+       # [9, 0, 2],
+       # [2, 2, 2],
+        #[4, 3, 3]
+    #]
+    #allocation = [
+     #   [0, 1, 0],
+      #  [2, 0, 0],
+       # [3, 0, 2],
+       # [2, 1, 1],
+        #[0, 0, 2]
+    #]
     print("Initial State:")
     print("Available resources:", banker.available)
     print("Maximum claim matrix:\n", banker.maximum)
