@@ -1,0 +1,17 @@
+n#! /bin/bash  
+#shebang, specifies interpreter
+
+clear
+
+sum=0
+echo "Enter a number:"
+read num
+
+while [ $num -gt 0 ]   #gt is greater than
+do
+  mod=$((num%10))
+  sum=$((sum + mod))
+  num=$((num/10))    #remove the last digit
+
+done
+echo "The sum of the digits is : $sum"
