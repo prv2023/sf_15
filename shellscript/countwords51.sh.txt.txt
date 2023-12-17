@@ -1,7 +1,0 @@
-filename=$1
-
-echo " Word Count: $(wc -w < ${filename})"
-echo "Char count: $(wc -m <${filename})"
-echo " Line count $(wc -l < ${filename})"
-
-#======= countwords51.sh =====
