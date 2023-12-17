@@ -1,56 +1,171 @@
-class DiskScheduler:
-    def __init__(self, requests, initial_position):
-        self.requests = requests
-        self.current_position = initial_position
-
-    def fcfs(self):
-        return self.requests.copy()
-
-    def sstf(self):
-        sequence = []
-        while self.requests:
-            closest_request = min(self.requests, key=lambda x: abs(x - self.current_position))
-            sequence.append(closest_request)
-            self.current_position = closest_request
-            self.requests.remove(closest_request)
-        return sequence
-
-    def scan(self):
-        sequence = []
-        sorted_requests = sorted(self.requests)
-        lower_requests = [request for request in sorted_requests if request < self.current_position]
-        higher_requests = [request for request in sorted_requests if request >= self.current_position]
-        sequence.extend(reversed(lower_requests))
-        sequence.extend(higher_requests)
-        return sequence
-
-    def c_scan(self):
-        sequence = []
-        sorted_requests = sorted(self.requests)
-        lower_requests = [request for request in sorted_requests if request < self.current_position]
-        higher_requests = [request for request in sorted_requests if request >= self.current_position]
-        sequence.extend(reversed(lower_requests))
-        sequence.extend(reversed(higher_requests))
-        return sequence
-
-    def look(self):
-        sequence = []
-        sorted_requests = sorted(self.requests)
-        lower_requests = [request for request in sorted_requests if request < self.current_position]
-        higher_requests = [request for request in sorted_requests if request > self.current_position]
-        sequence.extend(reversed(lower_requests))
-        sequence.extend(higher_requests)
-        return sequence
+cyl = 199
+disks = [0] * 200  # Initialize the disks array
+size = 0
+csize = 0
 
 
-# Example usage:
-requests = [98, 183, 37, 122, 14, 124, 65, 67]
-initial_position = 53
+def fifo(head):
+    seek = 0
+    print(f"{head}", end="")
+    for i in range(size):
+        print(" --> ", end="")
+        seek += abs(disks[i] - head)
+        print(f"{disks[i]} seek time: {seek}", end="")
+        head = disks[i]
+    return seek
 
-scheduler = DiskScheduler(requests, initial_position)
 
-print("FCFS:", scheduler.fcfs())
-print("SSTF:", scheduler.sstf())
-print("SCAN:", scheduler.scan())
-print("C-SCAN:", scheduler.c_scan())
-print("LOOK:", scheduler.look())
+def scan(head):
+    seek = 0
+    print(f"{head}:0", end="")
+    max_head = max(disks)
+    min_head = min(disks)
+    for i in range(head, max_head + 1):
+        for j in range(size):
+            if i == disks[j] or i == max_head:
+                seek += abs(i - head)
+                print(f" --> {i} seek time: {seek}", end="")
+                head = i
+
+    for i in range(max_head, min_head - 1, -1):
+        for j in range(size):
+            if i == disks[j]:
+                seek += abs(i - head)
+                print(f" --> {i} : {seek}", end="")
+                head = i
+
+    return seek
+
+
+def cscan(head):
+    seek = 0
+    head1 = head
+    for i in range(head, cyl + 1):
+        for j in range(size):
+            if disks[j] == i:
+                seek += abs(head - i)
+                print(f" --> {i} : {seek}", end="")
+                head = i
+        if i == cyl:
+            seek += abs(head - i)
+            print(f" --> {i} : {seek}", end="")
+            head = i
+
+    head = 0
+    seek += cyl
+    print(f" --> 0 : {seek}", end="")
+    for i in range(0, head1):
+        for j in range(size):
+            if disks[j] == i:
+                seek += abs(head - i)
+                print(f" --> {i} : {seek}", end="")
+                head = i
+    return seek
+
+
+def look(head):
+    copy = sorted(disks[:size])
+    temp = 0
+    for i in range(size):
+        for j in range(size - 1):
+            if copy[j] > copy[j + 1]:
+                temp = copy[j]
+                copy[j] = copy[j + 1]
+                copy[j + 1] = temp
+    headindex = 0
+    for i in range(size):
+        if copy[i] < head:
+            headindex = i + 1
+
+    print(headindex)
+    seek = 0
+    print(f"{head} : {seek}", end="")
+    for i in range(headindex, size):
+        seek += abs(copy[i] - head)
+        print(f" --> {copy[i]} : {seek}", end="")
+        head = copy[i]
+
+    for i in range(headindex - 1, -1, -1):
+        seek += abs(copy[i] - head)
+        print(f" --> {copy[i]} : {seek}", end="")
+        head = copy[i]
+
+    return seek
+
+
+def clook(head):
+    copy = sorted(disks[:size])
+    temp = 0
+    for i in range(size):
+        for j in range(size - 1):
+            if copy[j] > copy[j + 1]:
+                temp = copy[j]
+                copy[j] = copy[j + 1]
+                copy[j + 1] = temp
+    headindex = 0
+    for i in range(size):
+        if copy[i] < head:
+            headindex = i + 1
+
+    print(headindex)
+    seek = 0
+    print(f"{head} : {seek}", end="")
+    for i in range(headindex, size):
+        seek += abs(copy[i] - head)
+        print(f" --> {copy[i]} : {seek}", end="")
+        head = copy[i]
+
+    for i in range(0, headindex):
+        seek += abs(copy[i] - head)
+        print(f" --> {copy[i]} : {seek}", end="")
+        head = copy[i]
+
+    return seek
+
+
+def sstf(head):
+    global csize
+    copy = disks[:size]
+    seek = 0
+    print(f"| {head} : {seek} |", end="")
+    for i in range(size):
+        mindist = 0
+        for j in range(csize):
+            if abs(head - copy[j]) < abs(head - copy[mindist]):
+                mindist = j
+        seek += abs(head - copy[mindist])
+        head = copy[mindist]
+        print(f" --> | {head} : {seek} |", end="")
+        copy[mindist] = copy[csize - 1]
+        csize -= 1
+        flag = 0
+        for in_ in range(size):
+            if copy[in_] == -1:
+                flag += 1
+
+    return seek
+
+
+if __name__ == "__main__":
+     disks1 = []
+     size1 = int(input("Enter the size of the disks1 array: "))
+     
+     for i in range(size1):
+        disk = int(input(f"Enter disk {i+1}: "))
+        disks1.append(disk)
+     for i in range(size1):
+        size = size1
+        disks[i] = disks1[i]
+        
+     head = int(input("Enter the head position: "))
+     fifo_seek = fifo(head)
+     scan_seek = scan(head)
+     cscan_seek = cscan(head)
+     look_seek = look(head)
+     clook_seek = clook(head)
+     sstf_seek = sstf(head)
+
+     total_head_movements = fifo_seek + scan_seek + cscan_seek + look_seek + clook_seek + sstf_seek
+
+     print("Total head movements:", total_head_movements)
+    
