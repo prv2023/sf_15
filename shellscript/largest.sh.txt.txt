@@ -1,12 +1,18 @@
-a=$1
-b=$2
-c=$3
+#!/bin/bash
 
-if [ $a -gt $b ] && [ $a -gt $c ];then
-	echo "$a is the greatest"
-elif [ $b -gt $a ] && [ $b -gt $c ]; then
-	echo "$b is greaterst"
-else
-	echo "$c is greatest"
+echo "Enter three numbers:"
+read num1
+read num2
+read num3
+
+largest=$num1
+
+if [ $num2 -gt $largest ]; then
+    largest=$num2
 fi
-#======= largest.sh =====
+
+if [ $num3 -gt $largest ]; then
+    largest=$num3
+fi
+
+echo "The largest number is: $largest"
