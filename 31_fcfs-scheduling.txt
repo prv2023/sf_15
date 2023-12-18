@@ -13,11 +13,22 @@ def fcfs(processes):
 
     return waiting_time, turnaround_time
 
+print("Enter the number of processes:")
+n = int(input())
 # Example usage:
-processes_fcfs = [(1, 6), (2, 8), (3, 7), (4, 3)]
+#processes_fcfs = [(1, 6), (2, 8), (3, 7), (4, 3)]
+#waiting_time_fcfs, turnaround_time_fcfs = fcfs(processes_fcfs)
+
+processes_fcfs = []
+for i in range(n):
+    print(f"Enter the arrival time and burst time for process {i+1}:")
+    arrival_time = int(input(" "))
+    burst_time = int(input())
+    processes_fcfs.append((arrival_time, burst_time))
+
 waiting_time_fcfs, turnaround_time_fcfs = fcfs(processes_fcfs)
 
 print("FCFS Scheduling:")
-print("Process\tWaiting Time\tTurnaround Time")
+print("Process\t \t Waiting Time\tTurnaround Time")
 for i in range(len(processes_fcfs)):
-    print(f"{processes_fcfs[i][0]}\t{waiting_time_fcfs[i]}\t\t{turnaround_time_fcfs[i]}")
+    print(f"{processes_fcfs[i][0]}\t {waiting_time_fcfs[i]}\t\t{turnaround_time_fcfs[i]}")
