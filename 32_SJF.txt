@@ -17,8 +17,33 @@ def sjf(processes):
 # Example usage:
 
 
-processes_sjf = [(1, 6), (2, 8), (3, 7), (4, 3)]
+def sjf(processes):
+    n = len(processes)
+    wt = [0] * n
+    tat = [0] * n
+
+    wt[0] = 0
+    for i in range(1, n):
+        wt[i] = wt[i-1] + processes[i-1][1]
+
+    for i in range(n):
+        tat[i] = wt[i] + processes[i][1]
+
+    return wt, tat
+
+print("SJF Scheduling:")
+n = int(input("Enter the number of processes: "))
+processes_sjf = []
+for i in range(n):
+    process_id = int(input(f"Enter the process ID for process {i+1}: "))
+    burst_time = int(input(f"Enter the burst time for process {i+1}: "))
+    processes_sjf.append((process_id, burst_time))
+
 waiting_time_sjf, turnaround_time_sjf = sjf(processes_sjf)
+
+print("Process\tBurst Time\tWaiting Time\tTurnaround Time")
+for i in range(len(processes_sjf)):
+    print(f"{processes_sjf[i][0]}\t\t{processes_sjf[i][1]}\t\t{waiting_time_sjf[i]}\t\t{turnaround_time_sjf[i]}")
 
 print("\nSJF Scheduling:")
 print("Process\tBurst Time\tWaiting Time\tTurnaround Time")
