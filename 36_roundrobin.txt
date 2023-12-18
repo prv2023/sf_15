@@ -28,8 +28,14 @@ def rr(processes, time_slice):
     return wt, tat, avg_wt, avg_tat
 
 
-processes_rr = [(1, 6), (2, 5), (3, 9), (4, 15), (5, 1), (6, 12)]
-ts = 3
+n = int(input("Enter the number of processes: "))
+processes_rr = []
+
+for i in range(n):
+    burst_time = int(input(f"Enter burst time for process {i+1}: "))
+    processes_rr.append((i+1, burst_time))
+
+ts = int(input("Enter the time slice: "))
 wt_rr, tat_rr, avg_wt_rr, avg_tat_rr = rr(processes_rr, ts)
 
 print(f"Processes\tBurst Time\tWaiting Time\tTAT time")
