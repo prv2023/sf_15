@@ -1,0 +1,4 @@
+grep 'picture' filename.txt
+grep -i 'Rbecca\|rebecca' filename.txt
+grep -w '^b..k$' filename.txt
+grep -v 'pattern1\|pattern2' filename.txt
