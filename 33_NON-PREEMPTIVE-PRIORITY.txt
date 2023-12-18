@@ -22,11 +22,15 @@ def priority_scheduling(processes):
 
 
 
-
-
-
 # Example usage:
-processes_priority = [(1, 6, 3), (2, 8, 1), (3, 7, 2), (4, 3, 4)]
+n = int(input("Enter the number of processes: "))
+processes_priority = []
+for i in range(n):
+    process_id = i + 1
+    burst_time = int(input(f"Enter the burst time for process {process_id}: "))
+    priority = int(input(f"Enter the priority for process {process_id}: "))
+    processes_priority.append((process_id, burst_time, priority))
+
 wt_priority, tat_priority, avg_wt_priority, avg_tat_priority = priority_scheduling(processes_priority)
 
 print("Non-Preemptive Priority Scheduling:")
